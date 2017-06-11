@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Werewolf's</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"/>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="row" id="joinGameRow">
+        <div class="col-sm-12">
+            <h2>Join Game</h2>
+        </div>
+        <div class="col-sm-12">
+            <form class="form-horizontal" target="#">
+                <div class="form-group form-group-lg">
+                    <div class="col-sm-offset-2 col-sm-3">
+                        <input class="form-control" type="text" id="GameIdInput"
+                               placeholder="Enter Game Id">
+                    </div>
+                    <div class="col-sm-3">
+                        <input class="form-control" type="text" id="NameInput"
+                               placeholder="Enter Name">
+                    </div>
+                    <div class="col-sm-1">
+                        <button type="button" class="btn btn-default btn-lg pull-right"
+                                id="joinGameBtn">Join
+                        </button>
+                    </div>
+                    <div class="col-sm-1">
+                        <button type="button" class="btn btn-default btn-lg pull-right"
+                                id="createGameBtn">Create
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row" id="roleRow" style="display: none">
+        <div class="col-sm-12">
+            <h2>Role</h2>
+        </div>
+        <div class="col-sm-offset-2 col-sm-8" style="text-align: center">
+            <h2>You are a
+                <mark id="roleNameStr">Villager</mark>
+            </h2>
+            <h3>You are on the
+                <mark id="teamStr">Village</mark>
+                Team
+            </h3>
+            <h3 id="roleDescriptionStr">You have no special abilities</h3>
+        </div>
+    </div>
+
+    <div class="row" id="votesRow" style="display: none">
+        <div class="col-sm-12">
+            <h2>Votes</h2>
+        </div>
+        <div class="col-sm-offset-2 col-sm-8">
+            <table class="table">
+                <tbody id="voteTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row" id="adminRow" style="display: none">
+        <div class="col-sm-12">
+            <h2>Admin</h2>
+        </div>
+        <div class="col-sm-offset-2 col-sm-8" style="text-align: center">
+            <table class="table">
+                <thead>
+                <th>Role</th>
+                <th>Minimum Players</th>
+                <th>Random Chance Players</th>
+                </thead>
+                <tbody id="roleTableBody">
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-offset-2 col-sm-8" style="text-align: right">
+            <button class="btn btn-default" id="assignRolesBtn">Assign Roles</button>
+            <button class="btn btn-default" id="clearVotesBtn">Clear Votes</button>
+        </div>
+    </div>
+
+</div>
+
+<script id="voteTemplate" type="x-tmpl-mustache">
+<td>{{name}}</td>
+<td>{{votes}}</td>
+{{#role}}
+<td>{{role}}</td>
+{{/role}}
+{{^role}}
+<td style="text-align: right">
+<button data-name="{{name}}" class="btn btn-default voteBtn">Vote</button>
+</td>
+{{/role}}
+
+</script>
+
+<script id="rolesTemplate" type="x-tmpl-mustache">
+<td>{{roleName}}</td>
+<td><input class="form-control" data-property='minimumPlayers' type="number"/></td>
+<td><input class="form-control" data-property='randomChancePlayers' type="number"/></td>
+
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
