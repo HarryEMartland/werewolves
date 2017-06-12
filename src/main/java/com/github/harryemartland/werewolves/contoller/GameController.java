@@ -3,7 +3,7 @@ package com.github.harryemartland.werewolves.contoller;
 import com.github.harryemartland.werewolves.dto.GameRequest;
 import com.github.harryemartland.werewolves.repository.game.GameNotFoundException;
 import com.github.harryemartland.werewolves.service.game.GameService;
-import com.github.harryemartland.werewolves.service.game.UniqueIdException;
+import com.github.harryemartland.werewolves.service.game.UniqueGameIdException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Header;
@@ -20,7 +20,7 @@ public class GameController {
 
     @MessageMapping("/game/create")
     public void createGame(@Payload GameRequest gameRequest,
-                           @Header("simpSessionId") String sessionId) throws UniqueIdException {
+                           @Header("simpSessionId") String sessionId) throws UniqueGameIdException {
         gameService.createGame(sessionId, gameRequest);
     }
 

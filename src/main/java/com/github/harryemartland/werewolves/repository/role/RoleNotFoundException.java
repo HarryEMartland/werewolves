@@ -1,4 +1,11 @@
 package com.github.harryemartland.werewolves.repository.role;
 
-public class RoleNotFoundException extends Exception {
+import com.github.harryemartland.werewolves.domain.NotificationException;
+
+public class RoleNotFoundException extends NotificationException {
+
+    public RoleNotFoundException(String role) {
+        super("error", "Role not Found", "Could not find role " + role);
+    }
+
 }

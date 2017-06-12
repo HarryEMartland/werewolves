@@ -37,7 +37,7 @@ public class GameServiceImplTest {
     private GameServiceImpl gameService;
 
     @Test
-    public void shouldCreateGame() throws UniqueIdException {
+    public void shouldCreateGame() throws UniqueGameIdException {
 
         GameRequest gameRequest = new GameRequest();
         gameRequest.setName("user1");
@@ -82,8 +82,8 @@ public class GameServiceImplTest {
        Mockito.verify(notificationService).playerLeftGame(game, player);
     }
 
-    @Test(expected = UniqueIdException.class)
-    public void shoulThrowExceptionIfGameIdAlreadyInUse() throws GameNotFoundException, UniqueIdException {
+    @Test(expected = UniqueGameIdException.class)
+    public void shoulThrowExceptionIfGameIdAlreadyInUse() throws GameNotFoundException, UniqueGameIdException {
 
         Game game = mockGame(GAME_ID);
 

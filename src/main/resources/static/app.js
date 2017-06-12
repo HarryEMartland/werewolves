@@ -93,14 +93,19 @@ $(function () {
             });
 
             stompClient.subscribe('/user/queue/player/left', function (playerLeftEvetn) {
-                $.grep(playerList, function ( player) {
-                   if(player.name === playerLeftEvetn.body){
-                       player.playerLeft();
-                       toastr.error( player.name + ' left the game', 'Player Left');
-                       return true;
-                   }
-                   return false;
+                $.grep(playerList, function (player) {
+                    if (player.name === playerLeftEvetn.body) {
+                        player.playerLeft();
+                        toastr.error(player.name + ' left the game', 'Player Left');
+                        return true;
+                    }
+                    return false;
                 })
+            });
+
+            stompClient.subscribe('/user/queue/notification', function (notificationEvent) {
+                var notification = JSON.parse(notificationEvent.body);
+                toastr[notification.type](notification.body, notification.title)
             });
         });
 

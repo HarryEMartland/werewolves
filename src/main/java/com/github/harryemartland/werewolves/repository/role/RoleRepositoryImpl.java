@@ -16,7 +16,7 @@ public class RoleRepositoryImpl implements RoleRepository {
         return roles.stream()
                 .filter(role -> role.getName().equalsIgnoreCase(roleName))
                 .findFirst()
-                .orElseThrow(RoleNotFoundException::new);
+                .orElseThrow(() -> new RoleNotFoundException(roleName));
     }
 
     @Override

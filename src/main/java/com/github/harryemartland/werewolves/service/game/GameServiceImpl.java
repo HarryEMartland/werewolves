@@ -27,7 +27,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public Game createGame(String sessionId, GameRequest gameRequest)
-            throws UniqueIdException {
+            throws UniqueGameIdException {
 
         checkIdIsUnique(gameRequest);
 
@@ -62,11 +62,11 @@ public class GameServiceImpl implements GameService {
         notificationService.playerLeftGame(gameForPlayer, foundPlayer);
     }
 
-    private void checkIdIsUnique(GameRequest gameRequest) throws UniqueIdException {
+    private void checkIdIsUnique(GameRequest gameRequest) throws UniqueGameIdException {
         try {
             Game game = gameRepository.getGame(gameRequest.getId());
             if (game != null) {
-                throw new UniqueIdException();
+                throw new UniqueGameIdException(gameRequest.getId());
             }
         } catch (GameNotFoundException e) {
             log.trace("Game id not taken", e);

@@ -14,7 +14,7 @@ public class GameRepositoryImpl implements GameRepository {
     public Game getGame(String id) throws GameNotFoundException {
         Game game = gameMap.get(id);
         if (game == null) {
-            throw new GameNotFoundException();
+            throw new GameNotFoundException(id);
         }
         return game;
     }
@@ -24,7 +24,8 @@ public class GameRepositoryImpl implements GameRepository {
         return gameMap.entrySet().stream()
                 .map(Map.Entry::getValue)
                 .filter(game -> game.getAdmin().getSessionId().equalsIgnoreCase(sessionId))
-                .findFirst().orElseThrow(GameNotFoundException::new);
+                .findFirst()
+                .orElseThrow(() -> new GameNotFoundException(sessionId));
     }
 
     @Override
@@ -33,7 +34,8 @@ public class GameRepositoryImpl implements GameRepository {
                 .map(Map.Entry::getValue)
                 .filter(game -> game.getPlayers().stream()
                         .anyMatch(player -> player.getSessionId().equalsIgnoreCase(sessionId)))
-                .findFirst().orElseThrow(GameNotFoundException::new);
+                .findFirst()
+                .orElseThrow(() -> new GameNotFoundException(sessionId));
     }
 
     @Override

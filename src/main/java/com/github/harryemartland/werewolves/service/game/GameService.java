@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface GameService {
 
-    Game createGame(String sessionId, GameRequest gameRequest) throws UniqueIdException;
+    Game createGame(String sessionId, GameRequest gameRequest) throws UniqueGameIdException;
 
     List<String> joinGame(String sessionId, GameRequest gameRequest) throws GameNotFoundException;
 
