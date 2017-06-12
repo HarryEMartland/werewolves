@@ -11,10 +11,12 @@ import com.github.harryemartland.werewolves.service.notification.NotificationSer
 import com.github.harryemartland.werewolves.service.player.PlayerNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class GameServiceImpl implements GameService {
 
     @Autowired
@@ -24,11 +26,14 @@ public class GameServiceImpl implements GameService {
     private NotificationService notificationService;
 
     @Override
-    public Game createGame(String sessionId, GameRequest gameRequest) {
+    public Game createGame(String sessionId, GameRequest gameRequest)
+            throws UniqueIdException {
+
+        checkIdIsUnique(gameRequest);
+
         PlayerImpl admin = new PlayerImpl(gameRequest.getName(), sessionId);
         GameImpl game = new GameImpl(gameRequest.getId(), admin);
         gameRepository.addGame(game);
-        //todo if game id already excists throw exception
         return game;
     }
 
@@ -57,5 +62,14 @@ public class GameServiceImpl implements GameService {
         notificationService.playerLeftGame(gameForPlayer, foundPlayer);
     }
 
-
+    private void checkIdIsUnique(GameRequest gameRequest) throws UniqueIdException {
+        try {
+            Game game = gameRepository.getGame(gameRequest.getId());
+            if (game != null) {
+                throw new UniqueIdException();
+            }
+        } catch (GameNotFoundException e) {
+            log.trace("Game id not taken", e);
+        }
+    }
 }

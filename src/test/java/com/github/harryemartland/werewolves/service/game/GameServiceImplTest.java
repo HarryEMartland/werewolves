@@ -37,7 +37,7 @@ public class GameServiceImplTest {
     private GameServiceImpl gameService;
 
     @Test
-    public void shouldCreateGame() {
+    public void shouldCreateGame() throws UniqueIdException {
 
         GameRequest gameRequest = new GameRequest();
         gameRequest.setName("user1");
@@ -80,5 +80,18 @@ public class GameServiceImplTest {
 
        Mockito.verify(game).removePlayer(player);
        Mockito.verify(notificationService).playerLeftGame(game, player);
+    }
+
+    @Test(expected = UniqueIdException.class)
+    public void shoulThrowExceptionIfGameIdAlreadyInUse() throws GameNotFoundException, UniqueIdException {
+
+        Game game = mockGame(GAME_ID);
+
+        Mockito.when(gameRepository.getGame(GAME_ID)).thenReturn(game);
+
+        GameRequest gameRequest = new GameRequest();
+        gameRequest.setId(GAME_ID);
+
+        gameService.createGame(SESSION_ID, gameRequest);
     }
 }
