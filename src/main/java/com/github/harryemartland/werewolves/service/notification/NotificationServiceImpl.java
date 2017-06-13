@@ -1,5 +1,6 @@
 package com.github.harryemartland.werewolves.service.notification;
 
+import com.github.harryemartland.werewolves.domain.GameStartType;
 import com.github.harryemartland.werewolves.domain.game.Game;
 import com.github.harryemartland.werewolves.domain.player.Player;
 import com.github.harryemartland.werewolves.dto.PlayerVote;
@@ -59,6 +60,11 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public void roleAssigned(Player player) {
         sendToUser(player.getSessionId(), "/queue/role/assigned", player.getRole());
+    }
+
+    @Override
+    public void gameStart(Player player, GameStartType gameStartType) {
+        sendToUser(player.getSessionId(), "/queue/game/start", gameStartType);
     }
 
     private void sendToUser(String userId, String destination, Object data) {

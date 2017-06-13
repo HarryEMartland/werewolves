@@ -13,6 +13,8 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import static com.github.harryemartland.werewolves.domain.GameStartType.CREATE;
+import static com.github.harryemartland.werewolves.domain.GameStartType.JOIN;
 
 @Service
 @Slf4j
@@ -33,6 +35,7 @@ public class GameServiceImpl implements GameService {
         PlayerImpl admin = new PlayerImpl(gameRequest.getName(), sessionId);
         GameImpl game = new GameImpl(gameRequest.getId(), admin);
         gameRepository.addGame(game);
+        notificationService.gameStart(admin, CREATE);
         return game;
     }
 
@@ -43,6 +46,7 @@ public class GameServiceImpl implements GameService {
         PlayerImpl newPlayer = new PlayerImpl(gameRequest.getName(), sessionId);
         game.addPlayer(newPlayer);
         notificationService.playerJoinedGame(game, newPlayer);
+        notificationService.gameStart(newPlayer, JOIN);
         return game.getPlayers().stream()
                 .map(Player::getName)
                 .collect(Collectors.toList());

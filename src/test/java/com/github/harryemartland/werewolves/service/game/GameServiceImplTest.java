@@ -1,5 +1,6 @@
 package com.github.harryemartland.werewolves.service.game;
 
+import com.github.harryemartland.werewolves.domain.GameStartType;
 import com.github.harryemartland.werewolves.domain.game.Game;
 import com.github.harryemartland.werewolves.domain.player.Player;
 import com.github.harryemartland.werewolves.domain.player.PlayerImpl;
@@ -49,6 +50,7 @@ public class GameServiceImplTest {
         Assert.assertEquals("k3k3j", game.getAdmin().getSessionId());
 
         Mockito.verify(gameRepository).addGame(game);
+        Mockito.verify(notificationService).gameStart(Mockito.any(), Mockito.eq(GameStartType.CREATE));
     }
 
     @Test
@@ -68,6 +70,7 @@ public class GameServiceImplTest {
         PlayerImpl expectedNewPlayer = new PlayerImpl(USER_1, SESSION_ID);
         Mockito.verify(mockGame).addPlayer(Mockito.eq(expectedNewPlayer));
         Mockito.verify(notificationService).playerJoinedGame(Mockito.same(mockGame), Mockito.eq(expectedNewPlayer));
+        Mockito.verify(notificationService).gameStart(expectedNewPlayer, GameStartType.JOIN);
     }
 
     @Test

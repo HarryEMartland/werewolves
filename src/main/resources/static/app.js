@@ -82,8 +82,16 @@ $(function () {
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function () {
 
-            stompClient.subscribe('/user/queue/game/ended', function (greeting) {
+            stompClient.subscribe('/user/queue/game/ended', function () {
                 location.reload();
+            });
+
+            stompClient.subscribe('/user/queue/game/start', function (joinEvent) {
+                if(joinEvent.body === '"CREATE"'){
+                    $('#adminRow').show();
+                }
+                $('#joinGameRow').hide();
+                $('#votesRow').show();
             });
 
             stompClient.subscribe('/user/queue/game/join', function (newPlayersEvent) {
@@ -130,7 +138,7 @@ $(function () {
                 $(playerList).each(function (i, player) {
                     player.playerVoted(vote.sourcePlayer, vote.targetPlayer)
                 })
-            })
+            });
 
             stompClient.subscribe('/user/queue/notification', function (notificationEvent) {
                 var notification = JSON.parse(notificationEvent.body);
@@ -153,7 +161,6 @@ $(function () {
 
         $('#createGameBtn').on('click', function (e) {
             gameRequest('/app/game/create');
-            $('#adminRow').show();
         });
 
         function newPlayer(name) {
@@ -167,8 +174,6 @@ $(function () {
             var gameId = $('#GameIdInput').val();
             var name = $('#NameInput').val();
             var request = JSON.stringify({name: name, id: gameId});
-            $('#joinGameRow').hide();
-            $('#votesRow').show();
             stompClient.send(url, {}, request);
         }
 
