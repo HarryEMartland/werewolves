@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Werewolves</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           rel="stylesheet"
@@ -18,28 +19,23 @@
         <div class="col-sm-12">
             <h2>Join Game</h2>
         </div>
-        <div class="col-sm-12">
-            <form class="form-horizontal" target="#">
+        <div class="col-sm-12" style="text-align: center">
+
+            <form class="form-inline" target="#">
                 <div class="form-group form-group-lg">
-                    <div class="col-sm-offset-2 col-sm-3">
-                        <input class="form-control" type="text" id="GameIdInput"
-                               placeholder="Enter Game Id">
-                    </div>
-                    <div class="col-sm-3">
-                        <input class="form-control" type="text" id="NameInput"
-                               placeholder="Enter Name">
-                    </div>
-                    <div class="col-sm-1">
-                        <button type="button" class="btn btn-default btn-lg pull-right"
-                                id="joinGameBtn">Join
-                        </button>
-                    </div>
-                    <div class="col-sm-1">
-                        <button type="button" class="btn btn-default btn-lg pull-right"
-                                id="createGameBtn">Create
-                        </button>
-                    </div>
+                    <input class="form-control" type="text" id="GameIdInput"
+                           placeholder="Enter Game Id">
                 </div>
+                <div class="form-group form-group-lg">
+                    <input class="form-control" type="text" id="NameInput"
+                           placeholder="Enter Name">
+                </div>
+                <button type="button" class="btn btn-default btn-lg"
+                        id="joinGameBtn">Join
+                </button>
+                <button type="button" class="btn btn-default btn-lg"
+                        id="createGameBtn">Create
+                </button>
             </form>
         </div>
     </div>
@@ -110,9 +106,9 @@
 </script>
 
 <script id="rolesTemplate" type="x-tmpl-mustache">
-<td>{{roleName}}</td>
-<td><input class="form-control" data-property='minimumPlayers' type="number"/></td>
-<td><input class="form-control" data-property='randomChancePlayers' type="number"/></td>
+<td><span data-toggle="tooltip" data-placement="right" title="{{description}}">{{roleName}}</span></td>
+<td><input class="form-control" data-property='minimumPlayers' type="number" value="0"/></td>
+<td><input class="form-control" data-property='randomChancePlayers' type="number" value="0"/></td>
 
 </script>
 
@@ -121,6 +117,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script src="app.js"></script>
 
 </body>

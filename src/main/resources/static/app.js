@@ -7,8 +7,9 @@ var playerTemplate = $('#voteTemplate').html();
 Mustache.parse(rolesTemplate);
 
 
-function RoleConfig(roleName) {
+function RoleConfig(roleName, description) {
     this.roleName = roleName;
+    this.description = description;
     this.minimumPlayers = 0;
     this.randomChancePlayers = 0;
     var Current = this;
@@ -71,10 +72,12 @@ $(function () {
     $.get('role').done(function (response) {
 
         $(response).each(function (i, role) {
-            var roleConfig = new RoleConfig(role.name);
+            var roleConfig = new RoleConfig(role.name, role.description);
             roleConfigList.push(roleConfig);
             roleConfig.render();
-        })
+        });
+        $('[data-toggle="tooltip"]').tooltip()
+
     });
 
     function connect() {
