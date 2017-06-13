@@ -1,5 +1,8 @@
 package com.github.harryemartland.werewolves.service.game;
 
+import static com.github.harryemartland.werewolves.domain.GameStartType.CREATE;
+import static com.github.harryemartland.werewolves.domain.GameStartType.JOIN;
+
 import com.github.harryemartland.werewolves.domain.game.Game;
 import com.github.harryemartland.werewolves.domain.game.GameImpl;
 import com.github.harryemartland.werewolves.domain.player.Player;
@@ -13,8 +16,6 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import static com.github.harryemartland.werewolves.domain.GameStartType.CREATE;
-import static com.github.harryemartland.werewolves.domain.GameStartType.JOIN;
 
 @Service
 @Slf4j
