@@ -42,4 +42,9 @@ public class GameRepositoryImpl implements GameRepository {
     public void addGame(Game game) {
         gameMap.put(game.getId(), game);
     }
+
+    @Override
+    public void removeGame(Game game) {
+        gameMap.remove(game.getId());
+    }
 }

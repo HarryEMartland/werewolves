@@ -1,12 +1,12 @@
 package com.github.harryemartland.werewolves.repository.game;
 
-import static com.github.harryemartland.werewolves.util.TestBuilder.mockGame;
-import static com.github.harryemartland.werewolves.util.TestBuilder.mockPlayer;
 import com.github.harryemartland.werewolves.domain.game.Game;
 import com.github.harryemartland.werewolves.domain.player.Player;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
+import static com.github.harryemartland.werewolves.util.TestBuilder.mockGame;
+import static com.github.harryemartland.werewolves.util.TestBuilder.mockPlayer;
 
 public class GameRepositoryImplTest {
 
@@ -16,11 +16,19 @@ public class GameRepositoryImplTest {
 
     @Test
     public void shouldAddGame() throws GameNotFoundException {
-        Game game = Mockito.mock(Game.class);
-        Mockito.when(game.getId()).thenReturn("1234");
+        Game game = mockGame("1234");
 
         gameRepository.addGame(game);
         Assert.assertEquals(game, gameRepository.getGame("1234"));
+    }
+
+    @Test(expected = GameNotFoundException.class)
+    public void shouldRemoveGame() throws GameNotFoundException {
+        Game game = mockGame("1234");
+
+        gameRepository.addGame(game);
+        gameRepository.removeGame(game);
+        gameRepository.getGame("1234");
     }
 
     @Test

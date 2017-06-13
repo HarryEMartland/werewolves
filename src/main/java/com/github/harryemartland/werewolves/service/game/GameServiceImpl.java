@@ -8,7 +8,6 @@ import com.github.harryemartland.werewolves.dto.GameRequest;
 import com.github.harryemartland.werewolves.repository.game.GameNotFoundException;
 import com.github.harryemartland.werewolves.repository.game.GameRepository;
 import com.github.harryemartland.werewolves.service.notification.NotificationService;
-import com.github.harryemartland.werewolves.service.player.PlayerNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
@@ -50,16 +49,29 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void leaveGame(String sessionId) throws GameNotFoundException, PlayerNotFoundException {
-        Game gameForPlayer = gameRepository.getGameForPlayer(sessionId);
-        Player foundPlayer = gameForPlayer.getPlayers().stream()
-                .filter(player -> player.getSessionId().equalsIgnoreCase(sessionId))
-                .findFirst()
-                .orElseThrow(PlayerNotFoundException::new);
-        //todo if sessionId is for an admin delete the game and make clients reload
-        // page so they have to connect to a new game
-        gameForPlayer.removePlayer(foundPlayer);
-        notificationService.playerLeftGame(gameForPlayer, foundPlayer);
+    public void leaveGame(String sessionId) throws GameNotFoundException {
+        //todo remove try catches and make repo return optional
+        try {
+            Game gameForPlayer = gameRepository.getGameForPlayer(sessionId);
+
+            gameForPlayer.getPlayers().stream()
+                    .filter(player -> player.getSessionId().equalsIgnoreCase(sessionId))
+                    .findFirst()
+                    .ifPresent(player -> {
+                        gameForPlayer.removePlayer(player);
+                        notificationService.playerLeftGame(gameForPlayer, player);
+                    });
+        } catch (GameNotFoundException e) {
+            log.trace("game not found for player {}", sessionId, e);
+        }
+
+        try {
+            Game gameForAdmin = gameRepository.getGameForAdmin(sessionId);
+            gameRepository.removeGame(gameForAdmin);
+        } catch (GameNotFoundException e) {
+            log.trace("game not found for admin {}", sessionId, e);
+        }
+
     }
 
     private void checkIdIsUnique(GameRequest gameRequest) throws UniqueGameIdException {

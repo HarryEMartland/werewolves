@@ -71,10 +71,11 @@ public class GameServiceImplTest {
     }
 
     @Test
-    public void shouldLeaveGame() throws GameNotFoundException, PlayerNotFoundException {
+    public void shouldLeaveGamePlayer() throws GameNotFoundException, PlayerNotFoundException {
         Player player = mockPlayer(SESSION_ID);
         Game game = mockGame(player);
         Mockito.when(gameRepository.getGameForPlayer(SESSION_ID)).thenReturn(game);
+        Mockito.when(gameRepository.getGameForAdmin(SESSION_ID)).thenThrow(Mockito.mock(GameNotFoundException.class));
 
        gameService.leaveGame(SESSION_ID);
 
@@ -82,8 +83,18 @@ public class GameServiceImplTest {
        Mockito.verify(notificationService).playerLeftGame(game, player);
     }
 
+    @Test
+    public void shouldLeaveGameAdmin() throws GameNotFoundException {
+        Player player = mockPlayer(SESSION_ID);
+        Game game = mockGame(player);
+        Mockito.when(gameRepository.getGameForPlayer(SESSION_ID)).thenThrow(Mockito.mock(GameNotFoundException.class));
+        Mockito.when(gameRepository.getGameForAdmin(SESSION_ID)).thenReturn(game);
+        gameService.leaveGame(SESSION_ID);
+        Mockito.verify(gameRepository).removeGame(game);
+    }
+
     @Test(expected = UniqueGameIdException.class)
-    public void shoulThrowExceptionIfGameIdAlreadyInUse() throws GameNotFoundException, UniqueGameIdException {
+    public void shouldThrowExceptionIfGameIdAlreadyInUse() throws GameNotFoundException, UniqueGameIdException {
 
         Game game = mockGame(GAME_ID);
 
