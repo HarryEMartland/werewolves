@@ -18,7 +18,7 @@ public class SeerRole implements Role {
 
     @Override
     public String getDescription() {
-        return "Wakes up at night to 'see' if another player is a werewolf";
+        return "You wake up at night to 'see' if another player is a werewolf";
     }
 
     @Override

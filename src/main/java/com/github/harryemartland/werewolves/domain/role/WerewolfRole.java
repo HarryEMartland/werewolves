@@ -18,7 +18,7 @@ public class WerewolfRole implements Role {
 
     @Override
     public String getDescription() {
-        return "kills someone every night";
+        return "You and the other wolves chose someone to kill at night";
     }
 
     @Override

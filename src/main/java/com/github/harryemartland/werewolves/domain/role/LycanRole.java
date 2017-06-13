@@ -18,7 +18,7 @@ public class LycanRole implements Role {
 
     @Override
     public String getDescription() {
-        return "Appears as a wolf to the seer but is on the village team";
+        return "You appear as a wolf to the seer";
     }
 
     @Override

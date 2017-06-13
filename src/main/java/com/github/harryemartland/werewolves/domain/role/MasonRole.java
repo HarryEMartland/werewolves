@@ -18,7 +18,7 @@ public class MasonRole implements Role {
 
     @Override
     public String getDescription() {
-        return "Know who the other masons are";
+        return "You know who the other masons are";
     }
 
     @Override

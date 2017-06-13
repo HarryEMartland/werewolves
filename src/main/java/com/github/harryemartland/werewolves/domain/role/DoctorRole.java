@@ -18,7 +18,7 @@ public class DoctorRole implements Role {
 
     @Override
     public String getDescription() {
-        return "Can heal themselves or another player to protect them from being killed by a wolf";
+        return "You can heal yourself or another player to protect from being killed by a wolf";
     }
 
     @Override

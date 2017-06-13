@@ -18,7 +18,7 @@ public class VillagerRole implements Role {
 
     @Override
     public String getDescription() {
-        return "Just a boring villager has no powers";
+        return "You are just a boring villager, you have no powers";
     }
 
     @Override
