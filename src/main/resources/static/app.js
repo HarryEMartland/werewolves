@@ -82,8 +82,8 @@ $(function () {
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function () {
 
-            stompClient.subscribe('/topic/greetings', function (greeting) {
-                showGreeting(JSON.parse(greeting.body).content);
+            stompClient.subscribe('/user/queue/game/ended', function (greeting) {
+                location.reload();
             });
 
             stompClient.subscribe('/user/queue/game/join', function (newPlayersEvent) {

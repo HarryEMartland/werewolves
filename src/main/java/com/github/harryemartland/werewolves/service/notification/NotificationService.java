@@ -9,6 +9,8 @@ public interface NotificationService {
 
     void playerLeftGame(Game game, Player player);
 
+    void gameEnded(Game game);
+
     void playerVoted(Game game, Player player);
 
     void roleAssigned(Player player);

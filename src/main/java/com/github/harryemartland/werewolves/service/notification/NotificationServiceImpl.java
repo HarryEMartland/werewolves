@@ -35,6 +35,15 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
+    public void gameEnded(Game game) {
+        sendToUser(game.getAdmin().getSessionId(), "/queue/game/ended", true);
+        for (Player player : game.getPlayers()) {
+            sendToUser(player.getSessionId(), "/queue/game/ended", true);
+        }
+    }
+
+
+    @Override
     public void playerVoted(Game game, Player votedPlayer) {
 
         PlayerVote playerVote = new PlayerVote();

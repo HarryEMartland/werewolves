@@ -68,6 +68,7 @@ public class GameServiceImpl implements GameService {
         try {
             Game gameForAdmin = gameRepository.getGameForAdmin(sessionId);
             gameRepository.removeGame(gameForAdmin);
+            notificationService.gameEnded(gameForAdmin);
         } catch (GameNotFoundException e) {
             log.trace("game not found for admin {}", sessionId, e);
         }

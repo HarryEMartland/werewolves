@@ -91,6 +91,7 @@ public class GameServiceImplTest {
         Mockito.when(gameRepository.getGameForAdmin(SESSION_ID)).thenReturn(game);
         gameService.leaveGame(SESSION_ID);
         Mockito.verify(gameRepository).removeGame(game);
+        Mockito.verify(notificationService).gameEnded(game);
     }
 
     @Test(expected = UniqueGameIdException.class)
