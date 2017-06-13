@@ -22,7 +22,8 @@ public class PlayerServiceImpl implements PlayerService {
     public void vote(String sessionId, String votePlayerName)
             throws GameNotFoundException, PlayerNotFoundException {
 
-        Game gameForPlayer = gameRepository.getGameForPlayer(sessionId);
+        Game gameForPlayer = gameRepository.getGameForPlayer(sessionId)
+                .orElseThrow(() -> new GameNotFoundException(sessionId));
 
         Player currentUser = gameForPlayer.getPlayers().stream()
                 .filter(player -> Objects.equals(player.getSessionId(), sessionId))

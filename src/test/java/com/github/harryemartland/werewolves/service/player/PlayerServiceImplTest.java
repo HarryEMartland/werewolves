@@ -7,6 +7,7 @@ import com.github.harryemartland.werewolves.domain.player.Player;
 import com.github.harryemartland.werewolves.repository.game.GameNotFoundException;
 import com.github.harryemartland.werewolves.repository.game.GameRepository;
 import com.github.harryemartland.werewolves.service.notification.NotificationService;
+import java.util.Optional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -34,7 +35,7 @@ public class PlayerServiceImplTest {
         Player player = mockPlayer(PLAYER_SESSION_ID);
         Player player2 = mockPlayer("mrmkrkr", "player 2");
         Game game = mockGame(player, player2);
-        Mockito.when(gameRepository.getGameForPlayer(PLAYER_SESSION_ID)).thenReturn(game);
+        Mockito.when(gameRepository.getGameForPlayer(PLAYER_SESSION_ID)).thenReturn(Optional.of(game));
         playerService.vote(PLAYER_SESSION_ID, "player 2");
         Mockito.verify(player).setVote(player2);
         Mockito.verify(notificationService).playerVoted(game, player);

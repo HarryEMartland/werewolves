@@ -1,10 +1,14 @@
 package com.github.harryemartland.werewolves.service.admin;
 
+import static com.github.harryemartland.werewolves.util.TestBuilder.mockGame;
+import static com.github.harryemartland.werewolves.util.TestBuilder.mockPlayer;
+import static com.github.harryemartland.werewolves.util.TestBuilder.mockRole;
+
 import com.github.harryemartland.werewolves.domain.game.Game;
 import com.github.harryemartland.werewolves.domain.player.Player;
 import com.github.harryemartland.werewolves.domain.role.Role;
-import com.github.harryemartland.werewolves.dto.RoleQuantity;
 import com.github.harryemartland.werewolves.dto.PlayerRole;
+import com.github.harryemartland.werewolves.dto.RoleQuantity;
 import com.github.harryemartland.werewolves.repository.game.GameNotFoundException;
 import com.github.harryemartland.werewolves.repository.game.GameRepository;
 import com.github.harryemartland.werewolves.repository.role.RoleNotFoundException;
@@ -13,6 +17,7 @@ import com.github.harryemartland.werewolves.service.notification.NotificationSer
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import org.junit.Assert;
 import org.junit.Before;
@@ -23,9 +28,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
-import static com.github.harryemartland.werewolves.util.TestBuilder.mockGame;
-import static com.github.harryemartland.werewolves.util.TestBuilder.mockPlayer;
-import static com.github.harryemartland.werewolves.util.TestBuilder.mockRole;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AdminServiceImplTest {
@@ -61,7 +63,7 @@ public class AdminServiceImplTest {
 
     @Before
     public void setUp() throws RoleNotFoundException, GameNotFoundException {
-        Mockito.when(gameRepository.getGameForAdmin(ADMIN_SESSION_ID)).thenReturn(game);
+        Mockito.when(gameRepository.getGameForAdmin(ADMIN_SESSION_ID)).thenReturn(Optional.of(game));
         Mockito.when(roleRepository.findRole("role1")).thenReturn(role1);
         Mockito.when(roleRepository.findRole("role2")).thenReturn(role2);
         Mockito.when(roleRepository.findRole("role3")).thenReturn(role3);

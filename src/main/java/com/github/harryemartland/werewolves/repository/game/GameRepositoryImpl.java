@@ -3,6 +3,7 @@ package com.github.harryemartland.werewolves.repository.game;
 import com.github.harryemartland.werewolves.domain.game.Game;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -20,22 +21,20 @@ public class GameRepositoryImpl implements GameRepository {
     }
 
     @Override
-    public Game getGameForAdmin(String sessionId) throws GameNotFoundException {
+    public Optional<Game> getGameForAdmin(String sessionId) {
         return gameMap.entrySet().stream()
                 .map(Map.Entry::getValue)
                 .filter(game -> game.getAdmin().getSessionId().equalsIgnoreCase(sessionId))
-                .findFirst()
-                .orElseThrow(() -> new GameNotFoundException(sessionId));
+                .findFirst();
     }
 
     @Override
-    public Game getGameForPlayer(String sessionId) throws GameNotFoundException {
+    public Optional<Game> getGameForPlayer(String sessionId) {
         return gameMap.entrySet().stream()
                 .map(Map.Entry::getValue)
                 .filter(game -> game.getPlayers().stream()
                         .anyMatch(player -> player.getSessionId().equalsIgnoreCase(sessionId)))
-                .findFirst()
-                .orElseThrow(() -> new GameNotFoundException(sessionId));
+                .findFirst();
     }
 
     @Override

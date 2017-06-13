@@ -1,12 +1,14 @@
 package com.github.harryemartland.werewolves.repository.game;
 
+import static com.github.harryemartland.werewolves.util.TestBuilder.mockGame;
+import static com.github.harryemartland.werewolves.util.TestBuilder.mockPlayer;
+
 import com.github.harryemartland.werewolves.domain.game.Game;
 import com.github.harryemartland.werewolves.domain.player.Player;
+import java.util.Optional;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
-import static com.github.harryemartland.werewolves.util.TestBuilder.mockGame;
-import static com.github.harryemartland.werewolves.util.TestBuilder.mockPlayer;
 
 public class GameRepositoryImplTest {
 
@@ -41,13 +43,13 @@ public class GameRepositoryImplTest {
         Mockito.when(game.getAdmin()).thenReturn(admin);
 
         gameRepository.addGame(game);
-        Game adminGame = gameRepository.getGameForAdmin(ADMIN_SESSION_ID);
+        Game adminGame = gameRepository.getGameForAdmin(ADMIN_SESSION_ID).get();
         Assert.assertEquals(game, adminGame);
     }
 
-    @Test(expected = GameNotFoundException.class)
-    public void shouldThrowExceptionWhenGameDoesNotExistForUser() throws GameNotFoundException {
-        gameRepository.getGameForAdmin(ADMIN_SESSION_ID);
+    @Test()
+    public void shouldThrowExceptionWhenGameDoesNotExistForUser()  {
+        Assert.assertEquals(Optional.empty(),gameRepository.getGameForAdmin(ADMIN_SESSION_ID));
     }
 
     @Test
@@ -55,12 +57,12 @@ public class GameRepositoryImplTest {
         Player player = mockPlayer(PLAYER_ID);
         Game game = mockGame(player);
         gameRepository.addGame(game);
-        Game gameForPlayer = gameRepository.getGameForPlayer(PLAYER_ID);
+        Game gameForPlayer = gameRepository.getGameForPlayer(PLAYER_ID).get();
         Assert.assertEquals(game, gameForPlayer);
     }
 
-    @Test(expected = GameNotFoundException.class)
-    public void shouldThrowExceptionWhenGameNotFoundForPlayer() throws GameNotFoundException {
-        gameRepository.getGameForPlayer("not a player");
+    @Test
+    public void shouldReturnEmptyOptionalWhenGameNotFound() throws GameNotFoundException {
+        Assert.assertEquals(Optional.empty(), gameRepository.getGameForPlayer("not a player"));
     }
 }

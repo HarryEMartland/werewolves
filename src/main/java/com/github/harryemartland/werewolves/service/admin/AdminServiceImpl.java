@@ -36,7 +36,8 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void clearVotes(String adminSessionId) throws GameNotFoundException {
-        Game gameForAdmin = gameRepository.getGameForAdmin(adminSessionId);
+        Game gameForAdmin = gameRepository.getGameForAdmin(adminSessionId)
+                .orElseThrow(()->new GameNotFoundException(adminSessionId));
         for (Player player : gameForAdmin.getPlayers()) {
             player.setVote(null);
             notificationService.playerVoted(gameForAdmin, player);
@@ -46,7 +47,8 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public List<PlayerRole> assignRoles(String adminSessionId, List<RoleQuantity> roleQuantities)
             throws GameNotFoundException, RoleNotFoundException {
-        Game gameForAdmin = gameRepository.getGameForAdmin(adminSessionId);
+        Game gameForAdmin = gameRepository.getGameForAdmin(adminSessionId)
+                .orElseThrow(()->new GameNotFoundException(adminSessionId));
         int numberOfPlayers = gameForAdmin.getPlayers().size();
 
         List<Role> mandatoryRoles = new ArrayList<>();

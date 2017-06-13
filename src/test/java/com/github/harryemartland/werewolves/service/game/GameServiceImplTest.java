@@ -1,5 +1,8 @@
 package com.github.harryemartland.werewolves.service.game;
 
+import static com.github.harryemartland.werewolves.util.TestBuilder.mockGame;
+import static com.github.harryemartland.werewolves.util.TestBuilder.mockPlayer;
+
 import com.github.harryemartland.werewolves.domain.GameStartType;
 import com.github.harryemartland.werewolves.domain.game.Game;
 import com.github.harryemartland.werewolves.domain.player.Player;
@@ -11,6 +14,7 @@ import com.github.harryemartland.werewolves.service.notification.NotificationSer
 import com.github.harryemartland.werewolves.service.player.PlayerNotFoundException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,8 +22,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import static com.github.harryemartland.werewolves.util.TestBuilder.mockGame;
-import static com.github.harryemartland.werewolves.util.TestBuilder.mockPlayer;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GameServiceImplTest {
@@ -77,8 +79,8 @@ public class GameServiceImplTest {
     public void shouldLeaveGamePlayer() throws GameNotFoundException, PlayerNotFoundException {
         Player player = mockPlayer(SESSION_ID);
         Game game = mockGame(player);
-        Mockito.when(gameRepository.getGameForPlayer(SESSION_ID)).thenReturn(game);
-        Mockito.when(gameRepository.getGameForAdmin(SESSION_ID)).thenThrow(Mockito.mock(GameNotFoundException.class));
+        Mockito.when(gameRepository.getGameForPlayer(SESSION_ID)).thenReturn(Optional.of(game));
+        Mockito.when(gameRepository.getGameForAdmin(SESSION_ID)).thenReturn(Optional.empty());
 
        gameService.leaveGame(SESSION_ID);
 
@@ -90,8 +92,8 @@ public class GameServiceImplTest {
     public void shouldLeaveGameAdmin() throws GameNotFoundException {
         Player player = mockPlayer(SESSION_ID);
         Game game = mockGame(player);
-        Mockito.when(gameRepository.getGameForPlayer(SESSION_ID)).thenThrow(Mockito.mock(GameNotFoundException.class));
-        Mockito.when(gameRepository.getGameForAdmin(SESSION_ID)).thenReturn(game);
+        Mockito.when(gameRepository.getGameForPlayer(SESSION_ID)).thenReturn(Optional.empty());
+        Mockito.when(gameRepository.getGameForAdmin(SESSION_ID)).thenReturn(Optional.of(game));
         gameService.leaveGame(SESSION_ID);
         Mockito.verify(gameRepository).removeGame(game);
         Mockito.verify(notificationService).gameEnded(game);

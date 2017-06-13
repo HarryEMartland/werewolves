@@ -54,30 +54,19 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void leaveGame(String sessionId) throws GameNotFoundException {
-        //todo remove try catches and make repo return optional
-        try {
-            Game gameForPlayer = gameRepository.getGameForPlayer(sessionId);
+    public void leaveGame(String sessionId) {
+        gameRepository.getGameForPlayer(sessionId).ifPresent(game -> game.getPlayers().stream()
+                .filter(player -> player.getSessionId().equalsIgnoreCase(sessionId))
+                .findFirst()
+                .ifPresent(player -> {
+                    game.removePlayer(player);
+                    notificationService.playerLeftGame(game, player);
+                }));
 
-            gameForPlayer.getPlayers().stream()
-                    .filter(player -> player.getSessionId().equalsIgnoreCase(sessionId))
-                    .findFirst()
-                    .ifPresent(player -> {
-                        gameForPlayer.removePlayer(player);
-                        notificationService.playerLeftGame(gameForPlayer, player);
-                    });
-        } catch (GameNotFoundException e) {
-            log.trace("game not found for player {}", sessionId, e);
-        }
-
-        try {
-            Game gameForAdmin = gameRepository.getGameForAdmin(sessionId);
-            gameRepository.removeGame(gameForAdmin);
-            notificationService.gameEnded(gameForAdmin);
-        } catch (GameNotFoundException e) {
-            log.trace("game not found for admin {}", sessionId, e);
-        }
-
+        gameRepository.getGameForAdmin(sessionId).ifPresent(game -> {
+            gameRepository.removeGame(game);
+            notificationService.gameEnded(game);
+        });
     }
 
     private void checkIdIsUnique(GameRequest gameRequest) throws UniqueGameIdException {
