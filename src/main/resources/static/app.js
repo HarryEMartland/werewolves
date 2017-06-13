@@ -103,6 +103,35 @@ $(function () {
                 })
             });
 
+            stompClient.subscribe('/user/queue/role/assigned', function (roleEvent) {
+                var role = JSON.parse(roleEvent.body);
+                console.log(role);
+                toastr.success('You are a ' + role.name, 'Role Assigned');
+                $('#roleNameStr').text(role.name);
+                $('#roleDescriptionStr').text(role.description);
+                $('#teamStr').text(role.team.name);
+                $('#roleRow').show();
+            });
+
+            stompClient.subscribe('/user/queue/admin/role/assign', function (roleEvent) {
+                var roles = JSON.parse(roleEvent.body);
+                $(playerList).each(function (i, player) {
+                    player.adminUserAssigned(roles);
+                })
+            });
+
+            stompClient.subscribe('/user/queue/player/joined', function (newPlayerEvent) {
+                newPlayer(newPlayerEvent.body)
+            });
+
+            stompClient.subscribe('/user/queue/player/voted', function (voteEvent) {
+                var vote = JSON.parse(voteEvent.body);
+                toastr.warning(vote.sourcePlayer + ' voted for ' + vote.targetPlayer, 'Player Voted')
+                $(playerList).each(function (i, player) {
+                    player.playerVoted(vote.sourcePlayer, vote.targetPlayer)
+                })
+            })
+
             stompClient.subscribe('/user/queue/notification', function (notificationEvent) {
                 var notification = JSON.parse(notificationEvent.body);
                 toastr[notification.type](notification.body, notification.title)
@@ -115,17 +144,6 @@ $(function () {
 
         $('#joinGameBtn').on('click', function (e) {
             gameRequest('/app/game/join');
-
-            stompClient.subscribe('/user/queue/role/assigned', function (roleEvent) {
-                var role = JSON.parse(roleEvent.body);
-                console.log(role);
-                toastr.success('You are a ' + role.name, 'Role Assigned');
-                $('#roleNameStr').text(role.name);
-                $('#roleDescriptionStr').text(role.description);
-                $('#teamStr').text(role.team.name);
-                $('#roleRow').show();
-            });
-
         });
 
         $('#voteTableBody').on('click', function (e) {
@@ -136,13 +154,6 @@ $(function () {
         $('#createGameBtn').on('click', function (e) {
             gameRequest('/app/game/create');
             $('#adminRow').show();
-
-            stompClient.subscribe('/user/queue/admin/role/assign', function (roleEvent) {
-                var roles = JSON.parse(roleEvent.body);
-                $(playerList).each(function (i, player) {
-                    player.adminUserAssigned(roles);
-                })
-            });
         });
 
         function newPlayer(name) {
@@ -159,18 +170,6 @@ $(function () {
             $('#joinGameRow').hide();
             $('#votesRow').show();
             stompClient.send(url, {}, request);
-
-            stompClient.subscribe('/user/queue/player/joined', function (newPlayerEvent) {
-                newPlayer(newPlayerEvent.body)
-            });
-
-            stompClient.subscribe('/user/queue/player/voted', function (voteEvent) {
-                var vote = JSON.parse(voteEvent.body);
-                toastr.warning(vote.sourcePlayer + ' voted for ' + vote.targetPlayer, 'Player Voted')
-                $(playerList).each(function (i, player) {
-                    player.playerVoted(vote.sourcePlayer, vote.targetPlayer)
-                })
-            })
         }
 
     }
