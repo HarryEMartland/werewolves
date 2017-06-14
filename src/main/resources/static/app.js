@@ -132,6 +132,7 @@ $(function () {
             });
 
             stompClient.subscribe('/user/queue/player/joined', function (newPlayerEvent) {
+                toastr.success(name + ' joined the game', 'Player Joined');
                 newPlayer(newPlayerEvent.body)
             });
 
@@ -160,6 +161,9 @@ $(function () {
         $('#voteTableBody').on('click', function (e) {
             var votePlayer = $(e.target).attr('data-name');
             stompClient.send('/app/player/vote', {}, votePlayer);
+            $(playerList).each(function (i, player) {
+                player.playerVoted("", votePlayer)
+            })
         });
 
         $('#createGameBtn').on('click', function (e) {
@@ -167,7 +171,6 @@ $(function () {
         });
 
         function newPlayer(name) {
-            toastr.success(name + ' joined the game', 'Player Joined');
             var playerVote = new PlayerVote(name);
             playerList.push(playerVote);
             playerVote.render();
