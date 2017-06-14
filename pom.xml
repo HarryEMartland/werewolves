@@ -6,7 +6,7 @@
 
     <groupId>com.github.harryemartland</groupId>
     <artifactId>werewolves</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -15,12 +15,17 @@
     </parent>
 
     <properties>
+        <java.version>1.8</java.version>
         <js-tests.skip>false</js-tests.skip>
         <bower-components>${basedir}/src/main/resources/static/bower_components</bower-components>
     </properties>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -147,6 +152,23 @@
                     <excludes>
                         <exclude>com/github/harryemartland/werewolves/dto/*</exclude>
                     </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.3.0</version>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <repository>harrymartland/werewolves</repository>
+                    <tag>${project.version}</tag>
                 </configuration>
             </plugin>
         </plugins>
