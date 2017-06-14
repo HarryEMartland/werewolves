@@ -43,7 +43,6 @@ public class NotificationServiceImpl implements NotificationService {
         }
     }
 
-
     @Override
     public void playerVoted(Game game, Player votedPlayer) {
 
@@ -53,7 +52,9 @@ public class NotificationServiceImpl implements NotificationService {
 
         sendToUser(game.getAdmin().getSessionId(), "/queue/player/voted", playerVote);
         for (Player player : game.getPlayers()) {
-            sendToUser(player.getSessionId(), "/queue/player/voted", playerVote);
+            if (player != votedPlayer) {
+                sendToUser(player.getSessionId(), "/queue/player/voted", playerVote);
+            }
         }
     }
 
