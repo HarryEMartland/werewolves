@@ -17,6 +17,7 @@
             float: right;
             margin-left: 15px;
         }
+
         #roleTitle.collapsed:after {
             content: "\e114";
         }
@@ -55,7 +56,8 @@
         <div class="col-sm-12">
             <h2 data-toggle="collapse" id="roleTitle" data-target="#roleContent">Role</h2>
         </div>
-        <div class="col-sm-offset-2 col-sm-8 collapse in" id="roleContent" style="text-align: center">
+        <div class="col-sm-offset-2 col-sm-8 collapse in" id="roleContent"
+             style="text-align: center">
             <h2>You are a
                 <mark id="roleNameStr">Villager</mark>
             </h2>
@@ -86,9 +88,11 @@
         <div class="col-sm-offset-2 col-sm-8" style="text-align: center">
             <table class="table">
                 <thead>
-                <th>Role</th>
-                <th>Minimum Players</th>
-                <th>Random Chance Players</th>
+                <tr>
+                    <th>Role</th>
+                    <th>Minimum Players</th>
+                    <th>Random Chance Players</th>
+                </tr>
                 </thead>
                 <tbody id="roleTableBody">
                 </tbody>
@@ -114,12 +118,14 @@
 </td>
 {{/role}}
 
+
 </script>
 
 <script id="rolesTemplate" type="x-tmpl-mustache">
 <td><span data-toggle="tooltip" data-placement="right" title="{{description}}">{{roleName}}</span></td>
 <td><input class="form-control" data-property='minimumPlayers' type="number" value="0"/></td>
 <td><input class="form-control" data-property='randomChancePlayers' type="number" value="0"/></td>
+
 
 </script>
 
@@ -128,7 +134,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
 <script src="app.js"></script>
 
 </body>
