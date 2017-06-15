@@ -108,13 +108,19 @@
 
 <script id="voteTemplate" type="x-tmpl-mustache">
 <td>{{name}}</td>
-<td>{{votes}}</td>
+<td style="width:100%">
+<div class="progress">
+  <div class="progress-bar" role="progressbar" aria-valuenow="{{votes}}" aria-valuemin="0" aria-valuemax="{{totalPlayers}}" style="width: {{percentage}}%;">
+    {{votes}}/{{totalPlayers}}
+  </div>
+</div>
+</td>
 {{#role}}
 <td>{{role}}</td>
 {{/role}}
 {{^role}}
 <td style="text-align: right">
-<button data-name="{{name}}" class="btn btn-default voteBtn">Vote</button>
+<button data-name="{{name}}" {{voteDisabled}} class="btn btn-default voteBtn">Vote</button>
 </td>
 {{/role}}
 

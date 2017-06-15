@@ -36,8 +36,12 @@ function PlayerVote(playerName) {
     var tableRow = $('<tr></tr>');
     $('#voteTableBody').append(tableRow);
 
-    this.render = function () {
-        tableRow.html(Mustache.render(playerTemplate, Current));
+    this.render = function (totalPlayers) {
+        tableRow.html(Mustache.render(playerTemplate, $.extend(Current, {
+            "percentage": (Current.votes / totalPlayers) * 100,
+            "totalPlayers": totalPlayers,
+            "voteDisabled": playersVotedForUser[""]?"disabled":""
+        })));
     };
 
     this.adminUserAssigned = function (roles) {
@@ -56,11 +60,15 @@ function PlayerVote(playerName) {
             delete playersVotedForUser[source];
         }
         Current.votes = Object.keys(playersVotedForUser).length;
-        this.render();
     };
 
-    this.playerLeft = function () {
-        tableRow.remove()
+    this.playerLeftEvent = function (leavingName, totalPlayers) {
+        if(leavingName === this.name) {
+            tableRow.remove()
+        }
+        delete playersVotedForUser[leavingName];
+        Current.votes = Object.keys(playersVotedForUser).length;
+        this.render(totalPlayers);
     }
 }
 
@@ -90,7 +98,7 @@ $(function () {
             });
 
             stompClient.subscribe('/user/queue/game/start', function (joinEvent) {
-                if(joinEvent.body === '"CREATE"'){
+                if (joinEvent.body === '"CREATE"') {
                     $('#adminRow').show();
                 }
                 $('#joinGameRow').hide();
@@ -98,19 +106,17 @@ $(function () {
             });
 
             stompClient.subscribe('/user/queue/game/join', function (newPlayersEvent) {
-                $(JSON.parse(newPlayersEvent.body)).each(function (i, player) {
-                    newPlayer(player)
+                var newPlayers = JSON.parse(newPlayersEvent.body);
+                $(newPlayers).each(function (i, player) {
+                    newPlayer(player);
                 })
             });
 
             stompClient.subscribe('/user/queue/player/left', function (playerLeftEvetn) {
+                toastr.error(playerLeftEvetn.body + ' left the game', 'Player Left');
                 playerList = $.grep(playerList, function (player) {
-                    if (player.name === playerLeftEvetn.body) {
-                        player.playerLeft();
-                        toastr.error(player.name + ' left the game', 'Player Left');
-                        return false;
-                    }
-                    return true;
+                    player.playerLeftEvent(playerLeftEvetn.body , playerList.length);
+                    return player.name !== playerLeftEvetn.body;
                 });
             });
 
@@ -132,14 +138,18 @@ $(function () {
 
             stompClient.subscribe('/user/queue/player/joined', function (newPlayerEvent) {
                 toastr.success(newPlayerEvent.body + ' joined the game', 'Player Joined');
-                newPlayer(newPlayerEvent.body)
+                newPlayer(newPlayerEvent.body);
+                $.each(playerList, function (i, player) {
+                    player.render(playerList.length);
+                })
             });
 
             stompClient.subscribe('/user/queue/player/voted', function (voteEvent) {
                 var vote = JSON.parse(voteEvent.body);
                 toastr.warning(vote.sourcePlayer + ' voted for ' + vote.targetPlayer, 'Player Voted');
                 $(playerList).each(function (i, player) {
-                    player.playerVoted(vote.sourcePlayer, vote.targetPlayer)
+                    player.playerVoted(vote.sourcePlayer, vote.targetPlayer);
+                    player.render(playerList.length);
                 })
             });
 
@@ -161,7 +171,8 @@ $(function () {
             var votePlayer = $(e.target).attr('data-name');
             stompClient.send('/app/player/vote', {}, votePlayer);
             $(playerList).each(function (i, player) {
-                player.playerVoted("", votePlayer)
+                player.playerVoted("", votePlayer);
+                player.render(playerList.length);
             })
         });
 
@@ -172,7 +183,7 @@ $(function () {
         function newPlayer(name) {
             var playerVote = new PlayerVote(name);
             playerList.push(playerVote);
-            playerVote.render();
+            playerVote.render(playerList.length);
         }
 
         function gameRequest(url) {
