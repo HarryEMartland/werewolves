@@ -137,7 +137,7 @@ $(function () {
 
             stompClient.subscribe('/user/queue/player/voted', function (voteEvent) {
                 var vote = JSON.parse(voteEvent.body);
-                toastr.warning(vote.sourcePlayer + ' voted for ' + vote.targetPlayer, 'Player Voted')
+                toastr.warning(vote.sourcePlayer + ' voted for ' + vote.targetPlayer, 'Player Voted');
                 $(playerList).each(function (i, player) {
                     player.playerVoted(vote.sourcePlayer, vote.targetPlayer)
                 })
@@ -149,11 +149,11 @@ $(function () {
             });
         });
 
-        $('#assignRolesBtn').click(function (e) {
+        $('#assignRolesBtn').click(function () {
             stompClient.send('/app/admin/role/assign', {}, JSON.stringify(roleConfigList));
         });
 
-        $('#joinGameBtn').on('click', function (e) {
+        $('#joinGameBtn').on('click', function () {
             gameRequest('/app/game/join');
         });
 
@@ -165,7 +165,7 @@ $(function () {
             })
         });
 
-        $('#createGameBtn').on('click', function (e) {
+        $('#createGameBtn').on('click', function () {
             gameRequest('/app/game/create');
         });
 
