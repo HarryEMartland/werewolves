@@ -158,7 +158,7 @@ $(function () {
             gameRequest('/app/game/join');
         });
 
-        $('#voteTableBody').on('click', function (e) {
+        $('#voteTableBody').on('click', 'button', function (e) {
             var votePlayer = $(e.target).attr('data-name');
             stompClient.send('/app/player/vote', {}, votePlayer);
             $(playerList).each(function (i, player) {
