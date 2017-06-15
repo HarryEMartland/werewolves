@@ -39,6 +39,7 @@ function PlayerVote(playerName) {
     this.render = function (totalPlayers) {
         tableRow.html(Mustache.render(playerTemplate, $.extend(Current, {
             "percentage": (Current.votes / totalPlayers) * 100,
+            "barStyle": Current.votes > (totalPlayers/2)? "progress-bar-danger":"",
             "totalPlayers": totalPlayers,
             "voteDisabled": playersVotedForUser[""]?"disabled":""
         })));
