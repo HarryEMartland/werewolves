@@ -104,19 +104,18 @@ $(function () {
             });
 
             stompClient.subscribe('/user/queue/player/left', function (playerLeftEvetn) {
-                $.grep(playerList, function (player) {
+                playerList = $.grep(playerList, function (player) {
                     if (player.name === playerLeftEvetn.body) {
                         player.playerLeft();
                         toastr.error(player.name + ' left the game', 'Player Left');
-                        return true;
+                        return false;
                     }
-                    return false;
-                })
+                    return true;
+                });
             });
 
             stompClient.subscribe('/user/queue/role/assigned', function (roleEvent) {
                 var role = JSON.parse(roleEvent.body);
-                console.log(role);
                 toastr.success('You are a ' + role.name, 'Role Assigned');
                 $('#roleNameStr').text(role.name);
                 $('#roleDescriptionStr').text(role.description);
@@ -132,7 +131,7 @@ $(function () {
             });
 
             stompClient.subscribe('/user/queue/player/joined', function (newPlayerEvent) {
-                toastr.success(name + ' joined the game', 'Player Joined');
+                toastr.success(newPlayerEvent.body + ' joined the game', 'Player Joined');
                 newPlayer(newPlayerEvent.body)
             });
 
