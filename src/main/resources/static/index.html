@@ -10,6 +10,17 @@
           crossorigin="anonymous">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"/>
+    <style>
+        #roleTitle:after {
+            font-family: "Glyphicons Halflings";
+            content: "\e113";
+            float: right;
+            margin-left: 15px;
+        }
+        #roleTitle.collapsed:after {
+            content: "\e114";
+        }
+    </style>
 </head>
 <body>
 
@@ -42,9 +53,9 @@
 
     <div class="row" id="roleRow" style="display: none">
         <div class="col-sm-12">
-            <h2>Role</h2>
+            <h2 data-toggle="collapse" id="roleTitle" data-target="#roleContent">Role</h2>
         </div>
-        <div class="col-sm-offset-2 col-sm-8" style="text-align: center">
+        <div class="col-sm-offset-2 col-sm-8 collapse in" id="roleContent" style="text-align: center">
             <h2>You are a
                 <mark id="roleNameStr">Villager</mark>
             </h2>
