@@ -10,7 +10,8 @@ public interface GameService {
 
     Game createGame(String sessionId, GameRequest gameRequest) throws UniqueGameIdException;
 
-    List<String> joinGame(String sessionId, GameRequest gameRequest) throws GameNotFoundException;
+    List<String> joinGame(String sessionId, GameRequest gameRequest)
+            throws GameNotFoundException, DuplicatePlayerException;
 
     void leaveGame(String sessionId) throws GameNotFoundException, PlayerNotFoundException;
 

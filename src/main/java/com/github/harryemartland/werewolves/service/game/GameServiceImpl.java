@@ -42,8 +42,9 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public List<String> joinGame(String sessionId, GameRequest gameRequest)
-            throws GameNotFoundException {
+            throws GameNotFoundException, DuplicatePlayerException {
         Game game = gameRepository.getGame(gameRequest.getId());
+        checkForDuplicatePlayers(game, gameRequest.getName());
         PlayerImpl newPlayer = new PlayerImpl(gameRequest.getName(), sessionId);
         game.addPlayer(newPlayer);
         notificationService.playerJoinedGame(game, newPlayer);
@@ -51,6 +52,14 @@ public class GameServiceImpl implements GameService {
         return game.getPlayers().stream()
                 .map(Player::getName)
                 .collect(Collectors.toList());
+    }
+
+    private void checkForDuplicatePlayers(Game game, String name) throws DuplicatePlayerException {
+        boolean duplicatePlayer = game.getPlayers().stream()
+                .anyMatch(player -> player.getName().equalsIgnoreCase(name));
+        if (duplicatePlayer) {
+            throw new DuplicatePlayerException(name);
+        }
     }
 
     @Override

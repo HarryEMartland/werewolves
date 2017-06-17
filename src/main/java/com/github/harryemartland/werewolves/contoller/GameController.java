@@ -2,6 +2,7 @@ package com.github.harryemartland.werewolves.contoller;
 
 import com.github.harryemartland.werewolves.dto.GameRequest;
 import com.github.harryemartland.werewolves.repository.game.GameNotFoundException;
+import com.github.harryemartland.werewolves.service.game.DuplicatePlayerException;
 import com.github.harryemartland.werewolves.service.game.GameService;
 import com.github.harryemartland.werewolves.service.game.UniqueGameIdException;
 import java.util.List;
@@ -28,7 +29,7 @@ public class GameController {
     @SendToUser
     public List<String> joinGame(@Payload GameRequest gameRequest,
                                  @Header("simpSessionId") String sessionId)
-            throws GameNotFoundException {
+            throws GameNotFoundException, DuplicatePlayerException {
         return gameService.joinGame(sessionId, gameRequest);
     }
 

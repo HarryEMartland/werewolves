@@ -27,7 +27,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class GameServiceImplTest {
 
     private static final String SESSION_ID = "k3k3j";
-    private static final String USER_1 = "user1";
+    private static final String PLAYER_1 = "user1";
+    private static final String PLAYER_2 = "user2";
     private static final String GAME_ID = "1234";
 
     @Mock
@@ -56,20 +57,20 @@ public class GameServiceImplTest {
     }
 
     @Test
-    public void shouldJoinGame() throws GameNotFoundException {
+    public void shouldJoinGame() throws GameNotFoundException, DuplicatePlayerException {
         GameRequest gameRequest = new GameRequest();
-        gameRequest.setName(USER_1);
+        gameRequest.setName(PLAYER_2);
         gameRequest.setId(GAME_ID);
 
-        Player player = mockPlayer(SESSION_ID, USER_1);
+        Player player = mockPlayer(SESSION_ID, PLAYER_1);
         Game mockGame = mockGame(player);
 
         Mockito.when(gameRepository.getGame(GAME_ID)).thenReturn(mockGame);
 
         List<String> users = gameService.joinGame(SESSION_ID, gameRequest);
-        Assert.assertEquals(Collections.singletonList(USER_1), users);
+        Assert.assertEquals(Collections.singletonList(PLAYER_1), users);
 
-        PlayerImpl expectedNewPlayer = new PlayerImpl(USER_1, SESSION_ID);
+        PlayerImpl expectedNewPlayer = new PlayerImpl(PLAYER_2, SESSION_ID);
         Mockito.verify(mockGame).addPlayer(Mockito.eq(expectedNewPlayer));
         Mockito.verify(notificationService).playerJoinedGame(Mockito.same(mockGame), Mockito.eq(expectedNewPlayer));
         Mockito.verify(notificationService).gameStart(expectedNewPlayer, GameStartType.JOIN);
@@ -110,5 +111,19 @@ public class GameServiceImplTest {
         gameRequest.setId(GAME_ID);
 
         gameService.createGame(SESSION_ID, gameRequest);
+    }
+
+    @Test(expected = DuplicatePlayerException.class)
+    public void shouldThrowExceptionWhenPlayerNameAlreadyExists() throws GameNotFoundException, DuplicatePlayerException {
+        Player player = mockPlayer(SESSION_ID, PLAYER_1);
+
+        Game game = mockGame(player);
+
+        Mockito.when(gameRepository.getGame(GAME_ID)).thenReturn(game);
+
+        GameRequest gameRequest = new GameRequest();
+        gameRequest.setId(GAME_ID);
+        gameRequest.setName(PLAYER_1);
+        gameService.joinGame("d3dd3", gameRequest);
     }
 }
