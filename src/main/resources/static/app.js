@@ -6,6 +6,9 @@ Mustache.parse(rolesTemplate);
 var playerTemplate = $('#voteTemplate').html();
 Mustache.parse(rolesTemplate);
 
+toastr.options = {
+    "positionClass": "toast-bottom-left"
+};
 
 function RoleConfig(roleName, description) {
     this.roleName = roleName;
