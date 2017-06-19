@@ -113,6 +113,9 @@
                         <preloadSource>
                             https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js
                         </preloadSource>
+                        <preloadSource>
+                            https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js
+                        </preloadSource>
                         <preloadSource>${basedir}/src/main/resources/static/app.js</preloadSource>
                     </preloadSources>
                 </configuration>
