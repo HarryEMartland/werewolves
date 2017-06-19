@@ -11,14 +11,14 @@
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"/>
     <style>
-        #roleTitle:after {
+        .collapse-title:after {
             font-family: "Glyphicons Halflings";
             content: "\e113";
             float: right;
             margin-left: 15px;
         }
 
-        #roleTitle.collapsed:after {
+        .collapse-title.collapsed:after {
             content: "\e114";
         }
     </style>
@@ -54,7 +54,7 @@
 
     <div class="row" id="roleRow" style="display: none">
         <div class="col-sm-12">
-            <h2 data-toggle="collapse" id="roleTitle" data-target="#roleContent">Role</h2>
+            <h2 class="collapse-title" data-toggle="collapse" id="roleTitle" data-target="#roleContent">Role</h2>
         </div>
         <div class="col-sm-offset-2 col-sm-8 collapse in" id="roleContent"
              style="text-align: center">
@@ -101,6 +101,32 @@
         <div class="col-sm-offset-2 col-sm-8" style="text-align: right">
             <button class="btn btn-default" id="assignRolesBtn">Assign Roles</button>
             <button class="btn btn-default" id="clearVotesBtn">Clear Votes</button>
+        </div>
+    </div>
+
+    <div class="row" id="rulesRow">
+        <div class="col-sm-12">
+            <h2 class="collapse-title collapsed" data-toggle="collapse" id="rulesTitle" data-target="#rulesContent">Rules</h2>
+        </div>
+        <div class="col-sm-offset-2 col-sm-8 collapse" id="rulesContent">
+            <p>
+                Each player is assigned a role which belongs to a team, some roles have special abilities.
+                The werewolves team are trying to kill the villagers and the villagers are trying to kill the werewolves.
+            </p>
+            <p>
+                Each night the werewolves vote in secret to kill someone and each day all players vote to kill someone.
+                At night all players close there eyes and the narrator will wake players up by role.
+                The werewolves will be awoken together to vote who to kill and other roles may be awoken to do their ability.
+                The first night is special as none is killed by the werewolves and other characters may only be woken the first nigh.
+            </p>
+            <p>
+                During the day the narrator will let the players know who has died and invite them to discuss what has happened.
+                At the end of the day players vote who they would like to kill and the player with the majority of votes dies.
+            </p>
+            <p>
+                The game ends when either there are more werewolves than villages or the villagers kill all the werewolves.
+                For more information click <a href="https://en.wikipedia.org/wiki/Mafia_(party_game)" target="_blank">here</a>.
+            </p>
         </div>
     </div>
 
